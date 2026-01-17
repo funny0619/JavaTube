@@ -107,10 +107,19 @@ public class Youtube {
         this.usePoToken = usePoToken;
         this.allowCache = allowCache;
         if (this.usePoToken) {
-            String token = BotGuard.generatePoToken(getVideoId());
-            String vData = getVisitorData();
-            innerTube.insetPoToken(token, vData);
+            String poToken = BotGuard.generatePoToken(getVideoId());
+            String visitorData = getVisitorData();
+            if (isValidToken(poToken) && isValidVisitorData(visitorData)) {
+                innerTube.insetPoToken(poToken, visitorData);
+            }
         }
+    }
+
+    private boolean isValidToken(String poToken) {
+        return poToken != null && !poToken.isBlank();
+    }
+    private boolean isValidVisitorData(String visitorData) {
+        return visitorData != null && !visitorData.isBlank();
     }
 
     private String setVideoId() throws RegexMatchError {
