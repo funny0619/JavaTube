@@ -101,11 +101,16 @@ public class Youtube {
      * */
     public Youtube(String url, String clientName, boolean usePoToken, boolean allowCache) throws Exception {
         client = usePoToken ? "WEB" : clientName;
-        this.usePoToken = usePoToken;
-        this.allowCache = allowCache;
-        innerTube = new InnerTube(client, usePoToken, allowCache);
+        this.innerTube = new InnerTube(client, usePoToken, allowCache);
         urlVideo = url;
         watchUrl = "https://www.youtube.com/watch?v=" + getVideoId();
+        this.usePoToken = usePoToken;
+        this.allowCache = allowCache;
+        if (this.usePoToken) {
+            String token = BotGuard.generatePoToken(getVideoId());
+            String vData = getVisitorData();
+            innerTube.insetPoToken(token, vData);
+        }
     }
 
     private String setVideoId() throws RegexMatchError {
